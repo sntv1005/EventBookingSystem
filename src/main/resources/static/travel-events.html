@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Travel Booking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f9fa;
+            padding: 40px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #444;
+        }
+
+        .card {
+            background: white;
+            margin: 30px auto;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            max-width: 600px;
+            text-align: center;
+        }
+
+        select, .btn {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        .btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #45a049;
+        }
+
+        .route-options {
+            display: block;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Plan Your Travel</h2>
+
+<div class="card">
+    <h3>Select Travel Options</h3>
+
+    <select id="travelType" onchange="toggleRouteOptions()">
+        <option value="">-- Select Travel Type --</option>
+        <option value="bus">Bus</option>
+        <option value="train">Train</option>
+        <option value="plane">Plane</option>
+        <option value="hotel">Hotel</option>
+    </select>
+
+    <div class="route-options" id="routeSection">
+        <select id="fromLocation" onchange="validateLocations()">
+            <option value="">-- From --</option>
+            <option>Hyderabad</option>
+            <option>Bangalore</option>
+            <option>Mumbai</option>
+            <option>Delhi</option>
+            <option>Chennai</option>
+            <option>Pune</option>
+        </select>
+
+        <select id="toLocation" onchange="validateLocations()">
+            <option value="">-- To --</option>
+            <option>Hyderabad</option>
+            <option>Bangalore</option>
+            <option>Mumbai</option>
+            <option>Delhi</option>
+            <option>Chennai</option>
+            <option>Pune</option>
+        </select>
+        <div id="errorMessage" class="error"></div>
+    </div>
+
+    <button class="btn" onclick="searchOptions()">Search</button>
+</div>
+
+<script>
+    function toggleRouteOptions() {
+        const type = document.getElementById("travelType").value;
+        const routeSection = document.getElementById("routeSection");
+
+        if (type === "bus" || type === "train" || type === "plane") {
+            routeSection.style.display = "block";
+        } else {
+            routeSection.style.display = "none";
+        }
+    }
+
+    function validateLocations() {
+        const from = document.getElementById("fromLocation").value;
+        const to = document.getElementById("toLocation").value;
+        const errorMessage = document.getElementById("errorMessage");
+
+        if (from && to && from === to) {
+            errorMessage.textContent = "The 'From' and 'To' locations cannot be the same.";
+            document.getElementById("toLocation").setCustomValidity("Please select a different 'To' location.");
+        } else {
+            errorMessage.textContent = "";
+            document.getElementById("toLocation").setCustomValidity("");
+        }
+    }
+
+    function searchOptions() {
+        const type = document.getElementById("travelType").value;
+        const from = document.getElementById("fromLocation").value;
+        const to = document.getElementById("toLocation").value;
+
+        if (!type) {
+            alert("Please select travel type.");
+            return;
+        }
+
+        if ((type === "bus" || type === "train" || type === "plane") && (!from || !to)) {
+            alert("Please select both From and To locations.");
+            return;
+        }
+
+        const query = `available-options.html?mode=${type}&from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`;
+        window.location.href = query;
+    }
+</script>
+
+</body>
+</html>

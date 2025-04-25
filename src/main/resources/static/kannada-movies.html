@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kannada Movies</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f9fa;
+            padding: 40px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #444;
+        }
+
+        .event-card {
+            background: white;
+            margin: 15px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .event-card .status {
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        .event-card .completed {
+            color: red;
+        }
+
+        .event-card .upcoming {
+            color: green;
+        }
+
+        .btn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+<h2>Kannada Movies</h2>
+
+<div class="event-card" data-date="2024-11-15">
+    <h3>Movie 1 - Kannada</h3>
+    <div>Date: 2024-11-15</div>
+    <div class="status upcoming">Upcoming</div>
+    <button class="btn" onclick="redirectToBooking('Movie 1 - Kannada', '2024-11-15')">Book Now</button>
+</div>
+
+<div class="event-card" id="tomorrow-event-card">
+    <h3>Movie 2 - Kannada</h3>
+    <div id="event-date"></div>
+    <div class="status upcoming">Upcoming</div>
+    <button class="btn" onclick="redirectToBooking('Movie 2 - Kannada', document.getElementById('event-date').textContent)">Book Now</button>
+</div>
+
+<div class="event-card" data-date="2024-04-05">
+    <h3>Movie 3 - Kannada</h3>
+    <div>Date: 2024-04-05</div>
+    <div class="status completed">Completed</div>
+    <button class="btn" onclick="redirectToBooking('Movie 3 - Kannada', '2024-04-05')" disabled>Book Now</button>
+</div>
+
+<script>
+    // Get current date
+    const currentDate = new Date();
+
+    // Function to get tomorrow's date in YYYY-MM-DD format
+    function getTomorrowDate() {
+        const tomorrow = new Date();
+        tomorrow.setDate(currentDate.getDate() + 1);  // Set date to tomorrow
+        const year = tomorrow.getFullYear();
+        const month = (tomorrow.getMonth() + 1).toString().padStart(2, '0'); // Month is 0-based
+        const day = tomorrow.getDate().toString().padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    // Set tomorrow's date in the 'Movie 2 - Kannada' event card
+    const tomorrowDate = getTomorrowDate();
+    document.getElementById('event-date').textContent = tomorrowDate;
+
+    // Function to redirect to the booking page with selected movie and date
+    function redirectToBooking(movieName, eventDate) {
+        window.location.href = `book-movie.html?movie=${movieName}&date=${eventDate}&theme=Kannada`;
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Music Events</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f9fa;
+            padding: 40px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #444;
+        }
+
+        .event-card {
+            background: white;
+            margin: 15px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .event-card .status {
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        .event-card .completed {
+            color: red;
+        }
+
+        .event-card .upcoming {
+            color: green;
+        }
+
+        .btn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+<h2>Music Events</h2>
+
+<div class="event-card">
+    <h3>Rock Concert</h3>
+    <div>Date: 2024-12-01</div>
+    <div class="status upcoming">Upcoming</div>
+    <button class="btn" onclick="redirectToForm('Rock Concert', '2024-12-01')">Book Now</button>
+</div>
+
+<div class="event-card">
+    <h3>Jazz Night</h3>
+    <div>Date: 2024-10-15</div>
+    <div class="status upcoming">Upcoming</div>
+    <button class="btn" onclick="redirectToForm('Jazz Night', '2024-10-15')">Book Now</button>
+</div>
+
+<div class="event-card">
+    <h3>Classical Music Concert</h3>
+    <div>Date: 2024-09-22</div>
+    <div class="status upcoming">Upcoming</div>
+    <button class="btn" onclick="redirectToForm('Classical Music Concert', '2024-09-22')">Book Now</button>
+</div>
+
+<script>
+    function redirectToForm(eventName, eventDate) {
+        window.location.href = `index.html?theme=Music&date=${eventDate}&event=${eventName}`;
+    }
+</script>
+</body>
+</html>

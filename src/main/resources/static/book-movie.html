@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book Movie</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f9fa;
+            padding: 40px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #444;
+        }
+
+        .form-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            max-width: 500px;
+            margin: auto;
+        }
+
+        .form-container label {
+            display: block;
+            margin: 10px 0;
+        }
+
+        .form-container input, .form-container select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .form-container .total-price {
+            font-weight: bold;
+            color: green;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+<h2>Book Movie</h2>
+
+<div class="form-container">
+    <h3 id="movieName"></h3>
+    <div id="movieDate"></div>
+
+    <label for="seats">Select Seats</label>
+    <select id="seats">
+        <option value="1">1 Seat</option>
+        <option value="2">2 Seats</option>
+        <option value="3">3 Seats</option>
+        <option value="4">4 Seats</option>
+    </select>
+
+    <div class="total-price">
+        Total Amount: ₹<span id="totalAmount">0</span>
+    </div>
+
+    <button class="btn" onclick="bookTicket()">Confirm Booking</button>
+</div>
+
+<script>
+    // Get the URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const movieName = urlParams.get('movie');
+    const eventDate = urlParams.get('date');
+    const theme = urlParams.get('theme');
+
+    // Set the movie name and event date on the page
+    document.getElementById('movieName').textContent = movieName;
+    document.getElementById('movieDate').textContent = `Date: ${eventDate}`;
+
+    // Seat price based on the theme
+    const seatPrice = 200; // Set a fixed price for the event
+
+    // Calculate total amount whenever the user selects a different number of seats
+    document.getElementById('seats').addEventListener('change', function() {
+        const seatCount = this.value;
+        const totalAmount = seatCount * seatPrice;
+        document.getElementById('totalAmount').textContent = totalAmount;
+    });
+
+    // Function to simulate booking
+    function bookTicket() {
+        alert("Your booking has been confirmed! Total amount: ₹" + document.getElementById('totalAmount').textContent);
+        // Optionally, send the booking data to the backend here
+    }
+</script>
+</body>
+</html>

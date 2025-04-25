@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Food Menu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f9fa;
+            padding: 40px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #444;
+        }
+
+        .food-item {
+            background: white;
+            margin: 15px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .food-item h3 {
+            margin-bottom: 15px;
+        }
+
+        .food-item input {
+            width: 50px;
+            padding: 5px;
+            text-align: center;
+        }
+
+        .food-item .total-price {
+            margin-top: 10px;
+            font-weight: bold;
+            color: green;
+        }
+
+        .btn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #45a049;
+        }
+
+        .payment-section {
+            background: #f8f8f8;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+
+        .payment-section select, .payment-section input {
+            width: 100%;
+            margin: 10px 0;
+            padding: 8px;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Food Menu</h2>
+
+<!-- State and District Selection -->
+<div class="form-group">
+    <label for="state">State</label>
+    <select id="state">
+        <option value="Karnataka">Karnataka</option>
+        <option value="Maharashtra">Maharashtra</option>
+        <option value="Tamil Nadu">Tamil Nadu</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label for="district">District</label>
+    <select id="district">
+        <option value="Bangalore">Bangalore</option>
+        <option value="Mumbai">Mumbai</option>
+        <option value="Chennai">Chennai</option>
+    </select>
+</div>
+
+<!-- Dynamic Food Items will be displayed here -->
+<div id="food-list"></div>
+
+<!-- Total Price Section -->
+<div id="total-price" class="food-item">
+    <p>Total Price: ₹<span id="total-price-amount">0</span></p>
+    <button class="btn" onclick="confirmItems()">Confirm Items</button>
+</div>
+
+<!-- Payment Section -->
+<div id="payment-section" class="payment-section" style="display: none;">
+    <h3>Select Payment Method</h3>
+    <select id="payment-method" onchange="togglePaymentFields(this)">
+        <option value="">-- Select Payment Method --</option>
+        <option value="Debit/Credit Card">Debit/Credit Card</option>
+        <option value="UPI">UPI</option>
+    </select>
+
+    <!-- Card Fields -->
+    <div id="card-fields" style="display: none;">
+        <input type="text" placeholder="Card Number" id="cardNumber" />
+        <input type="text" placeholder="Expiry Date (MM/YY)" id="expiryDate" />
+        <input type="text" placeholder="CVV" id="cvv" />
+        <input type="text" placeholder="Name on Card" id="cardName" />
+    </div>
+
+    <!-- UPI Fields -->
+    <div id="upi-fields" style="display: none;">
+        <select id="upiApp">
+            <option value="">-- Select UPI App --</option>
+            <option>PhonePe</option>
+            <option>Google Pay</option>
+            <option>Paytm</option>
+            <option>CRED</option>
+        </select>
+        <input type="text" id="upiNumber" placeholder="Enter UPI Number" />
+    </div>
+
+    <button class="btn" onclick="confirmPayment()">Confirm Payment</button>
+    <div class="error" id="paymentError"></div>
+</div>
+
+<script>
+    // Sample data for food items
+    const foodItems = [
+        { name: "Pizza", price: Math.floor(Math.random() * 100) + 100 },
+        { name: "Pasta", price: Math.floor(Math.random() * 100) + 100 },
+        { name: "Biryani", price: Math.floor(Math.random() * 100) + 100 },
+        { name: "Idli", price: Math.floor(Math.random() * 100) + 100 },
+    ];
+
+    let totalPrice = 0;
+
+    // Render food items dynamically
+    function renderFoodItems() {
+        const foodList = document.getElementById("food-list");
+        foodItems.forEach(item => {
+            const div = document.createElement("div");
+            div.classList.add("food-item");
+            div.innerHTML = `
+                <h3>${item.name}</h3>
+                <p>Price: ₹${item.price}</p>
+                <input type="number" min="0" value="0" id="quantity-${item.name}" onchange="updatePrice()">
+            `;
+            foodList.appendChild(div);
+        });
+    }
+
+    // Update total price whenever quantity changes
+    function updatePrice() {
+        totalPrice = 0;
+        foodItems.forEach(item => {
+            const quantity = document.getElementById(`quantity-${item.name}`).value;
+            totalPrice += item.price * quantity;
+        });
+        document.getElementById("total-price-amount").textContent = `₹${totalPrice}`;
+    }
+
+    // Show payment section after confirming items
+    function confirmItems() {
+        if (totalPrice === 0) {
+            alert("Please select some food items before proceeding.");
+            return;
+        }
+        document.getElementById("total-price").style.display = "none";
+        document.getElementById("payment-section").style.display = "block";
+    }
+
+    // Toggle payment fields based on selected method
+    function togglePaymentFields(select) {
+        const cardFields = document.getElementById("card-fields");
+        const upiFields = document.getElementById("upi-fields");
+
+        if (select.value === "Debit/Credit Card") {
+            cardFields.style.display = "block";
+            upiFields.style.display = "none";
+        } else if (select.value === "UPI") {
+            cardFields.style.display = "none";
+            upiFields.style.display = "block";
+        } else {
+            cardFields.style.display = "none";
+            upiFields.style.display = "none";
+        }
+    }
+
+    // Confirm payment and send data to the backend
+    function confirmPayment() {
+        const paymentMethod = document.getElementById("payment-method").value;
+        const errorDiv = document.getElementById("paymentError");
+        errorDiv.textContent = "";
+
+        // Capture user details
+        const username = localStorage.getItem('username') || "Guest";  // Replace with actual session data
+        const state = document.getElementById("state").value;
+        const district = document.getElementById("district").value;
+
+        let requestData = {
+            username: username,
+            restaurant: "Hotel Anand",  // This could be dynamic based on selected restaurant
+            state: state,
+            district: district,
+            items: foodItems.map(item => ({
+                name: item.name,
+                quantity: document.getElementById(`quantity-${item.name}`).value,
+                price: item.price
+            })),
+            totalAmount: totalPrice,
+            paymentMethod: paymentMethod
+        };
+
+        if (paymentMethod === "Debit/Credit Card") {
+            const cardNumber = document.getElementById("cardNumber").value;
+            const expiryDate = document.getElementById("expiryDate").value;
+            const cvv = document.getElementById("cvv").value;
+            const cardName = document.getElementById("cardName").value;
+
+            if (!cardNumber || !expiryDate || !cvv || !cardName) {
+                errorDiv.textContent = "Please fill in all card details.";
+                return;
+            }
+
+            requestData.cardNumber = cardNumber;
+            requestData.expiryDate = expiryDate;
+            requestData.cvv = cvv;
+            requestData.cardName = cardName;
+
+        } else if (paymentMethod === "UPI") {
+            const upiApp = document.getElementById("upiApp").value;
+            const upiNumber = document.getElementById("upiNumber").value;
+
+            if (!upiApp || !upiNumber) {
+                errorDiv.textContent = "Please fill in all UPI details.";
+                return;
+            }
+
+            requestData.upiApp = upiApp;
+            requestData.upiNumber = upiNumber;
+
+        } else {
+            errorDiv.textContent = "Please select a valid payment method.";
+            return;
+        }
+
+        // Simulate API call to save booking details
+        fetch("http://localhost:8089/api/food-bookings/save", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(requestData)
+        })
+        .then(res => res.json())
+        .then(data => {
+            alert("Payment Successful! Thank you for your order.");
+            console.log("Response:", data);
+        })
+        .catch(err => {
+            errorDiv.textContent = "Payment failed. Try again.";
+            console.error("Error:", err);
+        });
+    }
+
+    // Render food items on page load
+    renderFoodItems();
+</script>
+
+</body>
+</html>

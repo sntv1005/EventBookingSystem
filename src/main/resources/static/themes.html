@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Select Event Theme</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('images/india-map-bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+      padding: 40px;
+      margin: 0;
+      backdrop-filter: brightness(0.9);
+    }
+
+    h2, .main-heading, .sub-heading {
+      text-align: center;
+      margin: 10px 0;
+    }
+
+    h2 {
+      font-size: 32px;
+      color: #2c3e50;
+    }
+
+    .main-heading {
+      font-size: 40px;
+      color: #1a237e;
+      font-weight: bold;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    }
+
+    .sub-heading {
+      font-size: 20px;
+      color: #3949ab;
+      font-style: italic;
+      margin-bottom: 30px;
+    }
+
+    .profile-container {
+      text-align: right;
+      padding: 10px 20px;
+      font-weight: bold;
+    }
+
+    .logout-btn {
+      padding: 6px 12px;
+      background: #e74c3c;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .logout-btn:hover {
+      background: #c0392b;
+    }
+
+    .themes-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 25px;
+      padding: 20px;
+    }
+
+    .theme-card {
+      position: relative;
+      height: 180px;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      background-size: cover;
+      background-position: center;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .theme-card:hover {
+      transform: scale(1.05);
+    }
+
+    .theme-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .theme-title {
+      color: white;
+      font-size: 22px;
+      font-weight: bold;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+    }
+
+    .cricket-btn {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #ff9800;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+
+    .cricket-btn:hover {
+      background-color: #e68900;
+    }
+  </style>
+</head>
+<body>
+
+<div class="profile-container">
+  Welcome, <span id="userProfile"></span>!
+  <button class="logout-btn" onclick="logout()">Logout</button>
+</div>
+
+<h1 class="main-heading">Everything at One Place – Enjoy from Anywhere!</h1>
+<p class="sub-heading">Book Now and Make Every Moment Count</p>
+
+<div class="themes-container" id="themesGrid"></div>
+
+<script>
+  const user = sessionStorage.getItem("loggedInUser");
+  if (user) {
+    document.getElementById("userProfile").textContent = user;
+  } else {
+    window.location.href = "login.html";
+  }
+
+  function logout() {
+    sessionStorage.removeItem("loggedInUser");
+    window.location.href = "login.html";
+  }
+
+  const themes = [
+    { name: "Sci-Fi", file: "sci-fi-events.html", img: "https://source.unsplash.com/featured/?scifi" },
+    { name: "Travel", file: "travel-events.html", img: "https://source.unsplash.com/featured/?travel" },
+    { name: "Entertainment", file: "entertainment-events.html", img: "https://source.unsplash.com/featured/?entertainment" },
+    { name: "Art", file: "art-events.html", img: "https://source.unsplash.com/featured/?art" },
+    { name: "Fashion", file: "fashion-events.html", img: "https://source.unsplash.com/featured/?fashion" },
+    { name: "Music", file: "music-events.html", img: "https://source.unsplash.com/featured/?music" },
+    { name: "Nature", file: "nature-events.html", img: "https://source.unsplash.com/featured/?nature" },
+    { name: "Sports", file: "sports-events.html", img: "https://source.unsplash.com/featured/?sports" },
+    { name: "Food", file: "food-events.html", img: "https://source.unsplash.com/featured/?food" },
+    { name: "Comedy", file: "comedy-events.html", img: "https://source.unsplash.com/featured/?comedy" },
+    { name: "Book", file: "book-movie.html", img: "https://source.unsplash.com/featured/?book,movie" },
+    { name: "Cricket", file: "", img: "https://source.unsplash.com/featured/?cricket" }
+  ];
+
+  const grid = document.getElementById("themesGrid");
+
+  themes.forEach(theme => {
+    const card = document.createElement("div");
+    card.className = "theme-card";
+    card.style.backgroundImage = `url(${theme.img})`;
+
+    const overlay = document.createElement("div");
+    overlay.className = "theme-overlay";
+
+    const title = document.createElement("div");
+    title.className = "theme-title";
+    title.textContent = theme.name;
+
+    overlay.appendChild(title);
+    card.appendChild(overlay);
+
+    if (theme.name === "Cricket") {
+      const link = document.createElement("a");
+      link.href = "https://www.cricbuzz.com";
+      link.target = "_blank";
+      link.className = "cricket-btn";
+      link.textContent = "View Live Cricket Scores on Cricbuzz";
+      card.appendChild(link);
+    } else {
+      card.onclick = () => {
+        window.location.href = theme.file;
+      };
+    }
+
+    grid.appendChild(card);
+  });
+</script>
+
+</body>
+</html>

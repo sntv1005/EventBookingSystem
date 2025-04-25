@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Nature Events</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f9fa;
+            padding: 40px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #444;
+        }
+
+        .event-card {
+            background: white;
+            margin: 15px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .event-card .status {
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        .event-card .completed {
+            color: red;
+        }
+
+        .event-card .upcoming {
+            color: green;
+        }
+
+        .btn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+<h2>Nature Events</h2>
+
+<div class="event-card">
+    <h3>Forest Trekking Adventure</h3>
+    <div>Date: 2024-07-15</div>
+    <div class="status upcoming">Upcoming</div>
+    <button class="btn" onclick="redirectToForm('Forest Trekking Adventure', '2024-07-15')">Book Now</button>
+</div>
+
+<div class="event-card">
+    <h3>Mountain Climbing Expedition</h3>
+    <div>Date: 2024-09-10</div>
+    <div class="status upcoming">Upcoming</div>
+    <button class="btn" onclick="redirectToForm('Mountain Climbing Expedition', '2024-09-10')">Book Now</button>
+</div>
+
+<div class="event-card">
+    <h3>Beach Cleanup Drive</h3>
+    <div>Date: 2024-06-25</div>
+    <div class="status upcoming">Upcoming</div>
+    <button class="btn" onclick="redirectToForm('Beach Cleanup Drive', '2024-06-25')">Book Now</button>
+</div>
+
+<div class="event-card">
+    <h3>Wildlife Photography Workshop</h3>
+    <div>Date: 2024-08-05</div>
+    <div class="status upcoming">Upcoming</div>
+    <button class="btn" onclick="redirectToForm('Wildlife Photography Workshop', '2024-08-05')">Book Now</button>
+</div>
+
+<script>
+    function redirectToForm(eventName, eventDate) {
+        window.location.href = `index.html?theme=Nature&date=${eventDate}&event=${eventName}`;
+    }
+</script>
+</body>
+</html>

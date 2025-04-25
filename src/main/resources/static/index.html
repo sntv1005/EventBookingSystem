@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book Event</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(120deg, #f6f9fc, #e9eff5);
+            padding: 40px;
+        }
+
+        .form-container {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin: 15px 0 5px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<div class="form-container">
+    <h2>Book Your Event</h2>
+    <form id="eventForm">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="theme">Theme</label>
+        <input type="text" id="theme" name="theme" required readonly>
+
+        <label for="date">Event Date</label>
+        <input type="text" id="date" name="date" required readonly>
+
+        <label for="amount">Amount</label>
+        <input type="text" id="amount" name="amount" readonly>
+
+        <label for="comments">Comments</label>
+        <textarea id="comments" name="comments"></textarea>
+
+        <button type="submit">Book Event</button>
+    </form>
+</div>
+
+<script>
+    const prices = {
+        "Sports": 5000,
+        "Cultural": 4500,
+        "Sci-Fi": 6000,
+        "Adventurous": 5500,
+        "Movies": 4000,
+        "Dine out": 3500,
+        "Private Party": 7000,
+        "Birthday Party": 5000,
+        "School event": 3000
+    };
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const theme = urlParams.get('theme');
+    const date = urlParams.get('date');
+
+    if (theme) {
+        document.getElementById("theme").value = theme;
+        document.getElementById("amount").value = prices[theme] || "";
+    }
+
+    if (date) {
+        document.getElementById("date").value = date;
+    }
+
+    document.getElementById("eventForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const data = {
+            name: document.getElementById("name").value,
+            theme: document.getElementById("theme").value,
+            date: document.getElementById("date").value,
+            amount: document.getElementById("amount").value,
+            comments: document.getElementById("comments").value
+        };
+
+        fetch("http://localhost:8089/api/events/add", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        }).then(res => {
+            if (res.ok) {
+                alert("Event booked successfully!");
+                document.getElementById("eventForm").reset();
+            } else {
+                alert("Failed to book event.");
+            }
+        });
+    });
+</script>
+</body>
+</html>

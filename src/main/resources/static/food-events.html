@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Food Events</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f9fa;
+            padding: 40px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #444;
+        }
+
+        .event-card {
+            background: white;
+            margin: 15px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .btn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #45a049;
+        }
+
+        select {
+            padding: 8px;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .dropdown-container {
+            margin-top: 20px;
+            max-width: 500px;
+            margin: auto;
+        }
+
+        .restaurants {
+            display: none;
+        }
+
+    </style>
+</head>
+<body>
+<h2>Food Events</h2>
+
+<div class="dropdown-container">
+    <label for="state">Choose a State:</label>
+    <select id="state" onchange="loadCities()">
+        <option value="">Select a State</option>
+        <option value="Karnataka">Karnataka</option>
+        <option value="Maharashtra">Maharashtra</option>
+        <option value="Tamil Nadu">Tamil Nadu</option>
+        <option value="Delhi">Delhi</option>
+        <option value="Uttar Pradesh">Uttar Pradesh</option>
+        <option value="Telangana">Telangana</option>
+        <option value="Andhra Pradesh">Andhra Pradesh</option>
+    </select>
+
+    <label for="city">Choose a City:</label>
+    <select id="city" onchange="showRestaurants()">
+        <option value="">Select a City</option>
+    </select>
+
+    <!-- Restaurants Section -->
+    <div class="restaurants">
+        <h3>Restaurants in the selected City</h3>
+        <ul id="restaurants-list">
+            <!-- Dynamic restaurant list will be populated here -->
+        </ul>
+    </div>
+</div>
+
+<script>
+    const cities = {
+        "Karnataka": ["Bengaluru", "Mysuru", "Hubli", "Mangalore"],
+        "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Nashik"],
+        "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Trichy"],
+        "Delhi": ["New Delhi", "Old Delhi"],
+        "Uttar Pradesh": ["Lucknow", "Agra", "Kanpur", "Varanasi"],
+        "Telangana": ["Hyderabad", "Warangal", "Khammam"],
+        "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur"]
+    };
+
+    const restaurants = {
+        "Bengaluru": ["Halli Uta", "Bangalore One", "Nati Koli,Mudde"],
+        "Mysuru": ["Hanumantu palav", "Vinayka hotel", "Mysuru Palace"],
+        "Hubli": ["Hotel Shree Durga", "Hotel Anand", "Hotel Shree Krishna"],
+        "Mangalore": ["Hotel Janatha", "Hotel Prashanth", "Hotel Shree Krishna"],
+        "Nagpur": ["Hotel Surya", "Hotel Shree Krishna", "Hotel Anand"],
+        "Nashik": ["Hotel Panchavati", "Hotel Shree Krishna", "Hotel Anand"],
+        "Mumbai": ["Cafe Madras", "Cafe Coffee Day", "Cafe Coffee House"],
+        "Pune": ["Hotel Shree Krishna", "Hotel Anand", "Hotel Surya"],
+        "Chennai": ["Saravana Bhavan", "Anjappar", "Murugan Idli Shop"],
+        "Coimbatore": ["Sree Annapoorna", "Aasai", "Hotel Junior Kuppanna"],
+        "Hyderabad": ["Bawarchi", "Hitech", "Paradise", "Shah Ghouse"],
+        "Visakhapatnam": ["Hotel Daspalla", "Hotel Grand", "Hotel Surya"]
+    };
+
+    function loadCities() {
+        const state = document.getElementById("state").value;
+        const citySelect = document.getElementById("city");
+
+        // Clear previous cities
+        citySelect.innerHTML = '<option value="">Select a City</option>';
+
+        if (state && cities[state]) {
+            cities[state].forEach(city => {
+                const option = document.createElement("option");
+                option.value = city;
+                option.textContent = city;
+                citySelect.appendChild(option);
+            });
+        }
+    }
+
+    function showRestaurants() {
+        const city = document.getElementById("city").value;
+        const restaurantsDiv = document.querySelector(".restaurants");
+        const restaurantsList = document.getElementById("restaurants-list");
+
+        // Clear previous data
+        restaurantsList.innerHTML = '';
+
+        if (city && restaurants[city]) {
+            restaurantsDiv.style.display = "block";
+            restaurants[city].forEach(restaurant => {
+                const li = document.createElement("li");
+                li.textContent = restaurant;
+                li.onclick = () => redirectToFoodPage(restaurant, city);
+                restaurantsList.appendChild(li);
+            });
+        }
+    }
+
+    function redirectToFoodPage(restaurant, city) {
+        window.location.href = `food.html?restaurant=${restaurant}&city=${city}`;
+    }
+</script>
+</body>
+</html>
